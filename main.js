@@ -26,8 +26,12 @@ const mapDisplay = (lat, lng) => {
 };
 
 // Get the info the page needs
-const getData = (IP = '', DOMAIN = '') => {
-  fetch(`https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&ipAddress=${IP}&domain=${DOMAIN}`)
+const getData = (inputValue = '', searchType = 'IP') => {
+  const url = (searchType === 'IP') ?
+    `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&ipAddress=${inputValue}` :
+    `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&domain=${inputValue}`;
+
+  fetch(url)
     .then(res => res.json())
     .then(data => {
       myIpAddr.innerText = data.ip
@@ -37,6 +41,11 @@ const getData = (IP = '', DOMAIN = '') => {
       mapDisplay(data.location.lat, data.location.lng)
     })
     .catch(error => {
+      myIpAddr.innerText = '__'
+      myLocation.innerText = '__'
+      myTimezone.innerText = '__'
+      myIsp.innerText = '__'
+
       const myInput = myForm.searchInput
       myInput.classList.add('error')
 
@@ -54,11 +63,11 @@ myForm.addEventListener('submit', (e) => {
   const myInput = myForm.searchInput
 
   if (myInput.value.match(regexIp)) {
-    getData(myInput.value, '')
+    getData(myInput.value)
   }
 
   if (myInput.value.match(regexDomain)) {
-    getData('', myInput.value)
+    getData(myInput.value, searchType = 'DOMAIN')
   }
 
   if (!myInput.value.match(regexDomain) && !myInput.value.match(regexIp)) {

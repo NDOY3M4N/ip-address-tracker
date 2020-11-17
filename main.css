@@ -83,7 +83,7 @@ input.error { color: red; }
 
 input.error + button {
   cursor: not-allowed;
-  background: hsl(0, 0%, 37%);
+  background: hsl(0, 0%, 47%);
 }
 
 button {
@@ -92,6 +92,7 @@ button {
   flex: none;
   border: none;
   background-color: var(--very-dark-gray);
+  cursor: pointer;
 }
 button:hover {
   background: hsl(0, 0%, 27%);
