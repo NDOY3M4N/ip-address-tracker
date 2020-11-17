@@ -6,41 +6,43 @@ const myTimezone = document.querySelector('.timezone h2')
 const myIsp = document.querySelector('.isp h2')
 
 // Map creation
-const myMap = L.map("myMap", {
-  zoomControl: false
-});
+const myMap = L.map('myMap', {
+  zoomControl: false,
+})
 
 const mapDisplay = (lat, lng) => {
   const myIcon = L.icon({
-    iconUrl: "./images/icon-location.svg",
+    iconUrl: './images/icon-location.svg',
     iconSize: [40, 50],
-    iconAnchor: [20, 25]
-  });
+    iconAnchor: [20, 25],
+  })
 
-  myMap.setView([lat, lng], 16);
-  L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(myMap);
+  myMap.setView([lat, lng], 16)
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(myMap)
 
-  L.marker([lat, lng], { icon: myIcon }).addTo(myMap);
-};
+  L.marker([lat, lng], { icon: myIcon }).addTo(myMap)
+}
 
 // Get the info the page needs
 const getData = (inputValue = '', searchType = 'IP') => {
-  const url = (searchType === 'IP') ?
-    `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&ipAddress=${inputValue}` :
-    `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&domain=${inputValue}`;
+  const url =
+    searchType === 'IP'
+      ? `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&ipAddress=${inputValue}`
+      : `https://geo.ipify.org/api/v1?apiKey=at_e8YFs79ARdh1PfVH4s5rf6bJf99VW&domain=${inputValue}`
 
   fetch(url)
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       myIpAddr.innerText = data.ip
       myLocation.innerText = `${data.location.region}, ${data.location.city}`
-      myTimezone.innerText = data.location.timezone
+      myTimezone.innerText = `UTC ${data.location.timezone}`
       myIsp.innerText = data.isp
       mapDisplay(data.location.lat, data.location.lng)
     })
-    .catch(error => {
+    .catch((error) => {
       myIpAddr.innerText = '__'
       myLocation.innerText = '__'
       myTimezone.innerText = '__'
@@ -67,7 +69,7 @@ myForm.addEventListener('submit', (e) => {
   }
 
   if (myInput.value.match(regexDomain)) {
-    getData(myInput.value, searchType = 'DOMAIN')
+    getData(myInput.value, (searchType = 'DOMAIN'))
   }
 
   if (!myInput.value.match(regexDomain) && !myInput.value.match(regexIp)) {
