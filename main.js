@@ -10,20 +10,28 @@ const myMap = L.map('myMap', {
   zoomControl: false,
 })
 
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: `Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. Coded by <a href="https://www.github.com/NDOY3M4N">Abdoulaye NDOYE</a>.`,
+}).addTo(myMap)
+
+const myIcon = L.icon({
+  iconUrl: './images/icon-location.svg',
+  iconSize: [40, 50],
+  iconAnchor: [20, 25],
+})
+
+let myMarker
+
 const mapDisplay = (lat, lng) => {
-  const myIcon = L.icon({
-    iconUrl: './images/icon-location.svg',
-    iconSize: [40, 50],
-    iconAnchor: [20, 25],
-  })
-
   myMap.setView([lat, lng], 16)
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution:
-      '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(myMap)
 
-  L.marker([lat, lng], { icon: myIcon }).addTo(myMap)
+  // We first check if there is no marker drawn on the map.
+  // If there is, we remove it
+  if (myMarker != null) myMarker.remove()
+
+  myMarker = L.marker([lat, lng], { icon: myIcon })
+
+  myMarker.addTo(myMap)
 }
 
 // Get the info the page needs
@@ -52,6 +60,7 @@ const getData = (inputValue = '', searchType = 'IP') => {
       myInput.classList.add('error')
 
       setTimeout(() => myInput.classList.remove('error'), 3000)
+      console.error(error)
     })
 }
 
